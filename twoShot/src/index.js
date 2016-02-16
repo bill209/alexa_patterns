@@ -19,7 +19,7 @@
  * App ID for the skill
  */
 var APP_ID = undefined;//replace with 'amzn1.echo-sdk-ams.app.[your-unique-value-here]';
-
+var DAYS_OF_WEEK = [ 'sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday' ];
 // The AlexaSkill prototype and helper functions
  
 var AlexaSkill = require('./AlexaSkill');
@@ -42,11 +42,11 @@ patternSkill.prototype.eventHandlers.onLaunch = function (launchRequest, session
 // intent handlers
 
 patternSkill.prototype.intentHandlers = {
-	"WhatDayIsIntent": function (intent, session, response) {
-		whatDayIsIntent(session, response);
+    "WhatDayIsIntent": function (intent, session, response) {
+		handleWhatDayIsIntent(intent, session, response);
 	},
 	"WantAnotherDayIntent": function (intent, session, response) {
-		wantAnotherDayIntent(session, response);
+		wantAnotherDayIntent(intent, session, response);
 	},
 
 	"AMAZON.HelpIntent": function (intent, session, response) {
@@ -77,7 +77,7 @@ patternSkill.prototype.intentHandlers = {
 
 // start the dialog upon launch
 
-function startDialog(response) {
+function startDialog(session, response) {
     // If we wanted to initialize the session to have some attributes we could add those here.
     var cardTitle = "This Day App";
     var repromptText = "With the Day App, you can get the day of any given date. What date would you like the day for?";
@@ -97,7 +97,7 @@ function startDialog(response) {
 
 // determine the day given a date
 
-function whatDayIsIntent(session, response) {
+function handleWhatDayIsIntent(intent, session, response) {
 	var speechText = "";
 	var requestedDate = intent.slots.day;
 	var d = "";
@@ -109,15 +109,13 @@ function whatDayIsIntent(session, response) {
     } else {
         d = new Date();
     }
-    session.attributes.day = date.getDay();
+    session.attributes.day = d.getDay();
 
     // this just makes a little more grammatical sense, depending if the requested day is in the past or future
     var tense = d > todayDate ? "is" : "was";
 
-	// get day of given date
-	session.attributes.day = "monday";
-	speechText = "<speak>" + d + tense + " a " + session.attributes.day;
-	speechText += "<break time="2s"/> Would you like another day?</speak>";
+    // get day of given date
+    speechText = "<speak><say-as interpret-as=\"date\" format=\"mdy\">" + d + "</say-as>" + tense + " a " + DAYS_OF_WEEK[session.attributes.day] + ". Would you like another day?";
 
 	var speechOutput = {
 		speech: speechText,
@@ -126,7 +124,7 @@ function whatDayIsIntent(session, response) {
 	response.tellWithCard(speechOutput, "The Day App", speechText);
 }
 
-function wantAnotherDayIntent(session, response) {
+function wantAnotherDayIntent(intent, session, response) {
     var cardTitle = "This Day App";
     var repromptText = "With the Day App, you can get the day of any given date. What date would you like the day for?";
     var speechText = "What date would you like the day for?";
