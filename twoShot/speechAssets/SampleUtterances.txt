@@ -1,0 +1,15 @@
+WhatDayIsIntent what day is {day}
+WhatDayIsIntent what is the day of {day}
+WhatDayIsIntent {day} is what day
+WhatDayIsIntent what day of the week is {day}
+WhatDayIsIntent {day} is what day of the week
+WhatDayIsIntent {day}
+
+WhatDayIsIntent yes
+WhatDayIsIntent yeah
+WhatDayIsIntent ok
+
+WantAnotherDayIntent yep
+WantAnotherDayIntent yup
+WantAnotherDayIntent sure
+WantAnotherDayIntent yes please

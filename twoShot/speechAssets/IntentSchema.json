@@ -1,0 +1,25 @@
+{
+  "intents": [
+    {
+      "intent": "WhatDayIsIntent",
+      "slots": [
+        {
+          "name": "day",
+          "type": "AMAZON.DATE"
+        }
+      ]
+    },
+    {
+     "intent": "WantAnotherDayIntent"
+    },
+    {
+      "intent": "AMAZON.HelpIntent"
+    },
+    {
+      "intent": "AMAZON.StopIntent"
+    },
+    {
+      "intent": "AMAZON.CancelIntent"
+    }
+  ]
+}
