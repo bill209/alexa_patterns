@@ -76,15 +76,9 @@ patternSkill.prototype.intentHandlers = {
 function handleWhatDayIsItIntent(session, response) {
 	var speechText = "";
 
-	// get local date from GMT 
-	var GMToffset = new Date().getTimezoneOffset();		// this is in minutes (timezone)
-	var MS_PER_MINUTE = 60000;							// ms in a minute
-
-	var d = new Date();
-	var localDate = new Date(d - GMToffset * MS_PER_MINUTE);
-
-	session.attributes.day = DAYS_OF_WEEK[localDate.getDay()];	
-	speechText = "it is " + session.attributes.day + " in Greenwich, London";
+	// get day of week
+	session.attributes.day = DAYS_OF_WEEK[d.getDay()];	
+	speechText = "it is " + session.attributes.day + " in Greenwich London";
 
 	var speechOutput = {
 		speech: speechText,
