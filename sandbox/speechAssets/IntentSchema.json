@@ -1,0 +1,10 @@
+{
+  "intents": [
+    {
+     "intent": "test",
+    },
+    {
+      "intent": "AMAZON.StopIntent"
+    }
+  ]
+}

@@ -115,12 +115,16 @@ function handleWhatDayIsIntent(intent, session, response) {
     var tense = d > todayDate ? "is" : "was";
 
     // get day of given date
-    speechText = "<speak><say-as interpret-as=\"date\" format=\"mdy\">" + d + "</say-as>" + tense + " a " + DAYS_OF_WEEK[session.attributes.day] + ". Would you like another day?";
-
+    speechText = "<say-as interpret-as=\"date\" format=\"mdy\">" + d + "</say-as>" + tense + " a " + DAYS_OF_WEEK[session.attributes.day] + ". Would you like another day?";
+    speechText = 'the day is ' + DAYS_OF_WEEK[session.attributes.day];
 	var speechOutput = {
 		speech: speechText,
-		type: AlexaSkill.speechOutputType.SSML
+		type: AlexaSkill.speechOutputType.PLAIN_TEXT
 	};
+	// var speechOutput = {
+	// 	speech: '<speak>' + speechText + '</speak>',
+	// 	type: AlexaSkill.speechOutputType.SSML
+	// };
 	response.tellWithCard(speechOutput, "The Day App", speechText);
 }
 
