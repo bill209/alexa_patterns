@@ -1,0 +1,19 @@
+{
+  "intents": [
+    {
+     "intent": "QOD"
+    },
+    {
+     "intent": "Author"
+    },
+    {
+      "intent": "AMAZON.HelpIntent"
+    },
+    {
+      "intent": "AMAZON.StopIntent"
+    },
+    {
+      "intent": "AMAZON.CancelIntent"
+    }
+  ]
+}

@@ -1,0 +1,11 @@
+QOD	quote
+QOD	quote of the day
+QOD	may i have a quote
+QOD	quote please
+QOD	tell me a quote
+QOD	tell me a quote please
+
+Author	author
+Author	who was the author
+Author	who was the author of that quote
+Author	author of that quote
