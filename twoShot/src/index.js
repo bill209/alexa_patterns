@@ -8,18 +8,17 @@
  *
  * Dialog model:
  *  User: "Alexa, ask ozzi what day is August 15, 1952?"
- *  Alexa: "monday"
- *  Alexa: 
+ *  Alexa: "August 15, 1952 was a monday"
+ *  Alexa: "Would you like another day?"
  *   
  * note: the reason we're using GMT is that node servers report the date as GMT, and local
  * timezones/time are not available to external developers
  */
 
-/**
- * App ID for the skill
- */
+
 var APP_ID = undefined;//replace with 'amzn1.echo-sdk-ams.app.[your-unique-value-here]';
 var DAYS_OF_WEEK = [ 'sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday' ];
+
 // The AlexaSkill prototype and helper functions
  
 var AlexaSkill = require('./AlexaSkill');
@@ -64,16 +63,15 @@ patternSkill.prototype.intentHandlers = {
 		response.ask(speechOutput, repromptOutput);
 	},
 	"AMAZON.StopIntent": function (intent, session, response) {
-		var speechOutput = "Bye.";
+		var speechOutput = "Okey doke. Bye.";
 		response.tell(speechOutput);
 	},
 
 	"AMAZON.CancelIntent": function (intent, session, response) {
-		var speechOutput = "Bye.";
+		var speechOutput = "Okey doke. Bye.";
 		response.tell(speechOutput);
 	}
 };
-
 
 // start the dialog upon launch
 
@@ -99,6 +97,8 @@ function startDialog(session, response) {
 
 function handleWhatDayIsIntent(intent, session, response) {
 	var speechText = "";
+	var repromptText = "Would you like another day?";
+    var cardOutput = "Day App: what date would you like the day for? ";
 	var requestedDate = intent.slots.day;
 	var d = "";
 	var todayDate = new Date();
@@ -112,16 +112,23 @@ function handleWhatDayIsIntent(intent, session, response) {
     session.attributes.day = d.getDay();
 
     // this just makes a little more grammatical sense, depending if the requested day is in the past or future
-    var tense = d > todayDate ? "is" : "was";
+    var tense = d > todayDate ? " is" : " was";
+
+    // this converts the day into a better format to be spoken
+    var mdy = getMonthDayYear(d);
 
     // get day of given date
-    speechText = "<speak><say-as interpret-as=\"date\" format=\"mdy\">" + d + "</say-as>" + tense + " a " + DAYS_OF_WEEK[session.attributes.day] + ". Would you like another day?";
+    speechText = '<speak><p>' + mdy.date + tense + " a " + DAYS_OF_WEEK[session.attributes.day] + ".</p><p>Would you like another day?</p></speak>";
 
 	var speechOutput = {
 		speech: speechText,
 		type: AlexaSkill.speechOutputType.SSML
 	};
-	response.tellWithCard(speechOutput, "The Day App", speechText);
+    var repromptOutput = {
+        speech: repromptText,
+        type: AlexaSkill.speechOutputType.PLAIN_TEXT
+    };
+    response.askWithCard(speechOutput, repromptOutput, "The Day App", cardOutput);
 }
 
 function wantAnotherDayIntent(intent, session, response) {
@@ -147,3 +154,19 @@ exports.handler = function (event, context) {
 	var skill = new patternSkill();
 	skill.execute(event, context);
 };
+
+// this simply converts date object into readable form
+function getMonthDayYear(d){
+	var months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+
+	var mdy = { 
+			'month' : months[d.getMonth()],	
+			'day'	: d.getDate(),
+			'year'	: d.getFullYear()
+	};
+
+	mdy.date = mdy.month + mdy.day + ', ' + mdy.year;	// April 12 1992
+
+	return mdy;
+};
+

@@ -5,11 +5,14 @@ WhatDayIsIntent what day of the week is {day}
 WhatDayIsIntent {day} is what day of the week
 WhatDayIsIntent {day}
 
-WhatDayIsIntent yes
-WhatDayIsIntent yeah
-WhatDayIsIntent ok
-
+WantAnotherDayIntent yes
+WantAnotherDayIntent yeah
+WantAnotherDayIntent ok
 WantAnotherDayIntent yep
 WantAnotherDayIntent yup
 WantAnotherDayIntent sure
 WantAnotherDayIntent yes please
+
+AMAZON.StopIntent no
+AMAZON.StopIntent nada
+AMAZON.StopIntent nope
