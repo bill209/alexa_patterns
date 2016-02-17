@@ -36,13 +36,18 @@ sandboxSkill.prototype.intentHandlers = {
 // figure out the day in greenwich, london and output it
 
 function handleTest(intent, session, response) {
-	var speechText = "<speak>There is a three second pause here <break time=\"3s\"/> then the speech continues.</speak>";
+	var d = new Date();
+	var x = [];
+	x[0] = "<speak>There is a one second pause here <break time=\"1s\"/> then the speech continues.</speak>";
+	x[1] = "<speak>today is <say-as interpret-as='date' format='md'>0323</say-as></speak>";
+	x[2] = "<speak><say-as interpret-as='digits'>12345</say-as></speak>";
+	var speechText = x[1];
 
 	var speechOutput = {
 		speech: speechText,
 		type: AlexaSkill.speechOutputType.SSML
 	};
-	response.tellWithCard(speechOutput, "What Day Is It?", speechText);
+	response.tellWithCard(speechOutput, "Playing in the sandbox.", speechText);
 }
 
 // Create the handler that responds to the Alexa Request.
