@@ -32,7 +32,6 @@ patternSkill.prototype = Object.create(AlexaSkill.prototype);
 patternSkill.prototype.constructor = patternSkill;
 
 // default intent
-
  
 patternSkill.prototype.eventHandlers.onLaunch = function (launchRequest, session, response) {
 	quoter(response);
@@ -42,14 +41,11 @@ patternSkill.prototype.eventHandlers.onLaunch = function (launchRequest, session
 
 patternSkill.prototype.intentHandlers = {
 	"QOD": function (intent, session, response) {
-		test('b');
-//		handleQOD(intent, session, response);
+		quoter(response);
 	},
-
-	// "Author": function (intent, session, response) {
-	// 	handleAuthor(intent, session, response);
-	// },
-
+	"Author": function (intent, session, response) {
+		author(response);
+	},
 	"AMAZON.HelpIntent": function (intent, session, response) {
 		var speechText = "Quote of the day";
 		var speechOutput = {
@@ -81,8 +77,7 @@ function quoter(response) {
 
 	getQOD(function(res){
 
-console.log('+++++ ', res);
-		if(res.quote){
+		if(res.quote != ""){
 			speechText = res.quote;
 		} else {
 			speechText = "Sorry but there was an issue with that request.";
@@ -92,7 +87,27 @@ console.log('+++++ ', res);
 			speech: speechText,
 			type: AlexaSkill.speechOutputType.PLAIN_TEXT
 		};
-		response.tellWithCard(speechOutput, "Stock Ticker", speechText);
+		response.tellWithCard(speechOutput, "Quote of the Day", speechText);
+
+	})
+}
+
+function author(response) {
+	var speechText = "";
+
+	getQOD(function(res){
+
+		if(res.quote != ""){
+			speechText = res.author;
+		} else {
+			speechText = "Sorry but there was an issue with that request.";
+		}
+
+		var speechOutput = {
+			speech: speechText,
+			type: AlexaSkill.speechOutputType.PLAIN_TEXT
+		};
+		response.tellWithCard(speechOutput, "Quote of the Day Author", speechText);
 
 	})
 }
@@ -109,18 +124,15 @@ function getQOD(cback){
 
 		res.on('end', function () {
 //			var stringResult = parseJson(body);
-			cback(body);
+			cback(JSON.parse(body));
 		});
 	}).on('error', function (e) {
 		console.log("Got error: ", e);
-		body.status = "ERROR";
-		cback(e);		
+		cback(JSON.parse(e));		
 	});
 
 
 }
-
-
 
 // Create the handler that responds to the Alexa Request.
 exports.handler = function (event, context) {

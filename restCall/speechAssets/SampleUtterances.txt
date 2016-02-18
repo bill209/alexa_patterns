@@ -4,6 +4,8 @@ QOD	may i have a quote
 QOD	quote please
 QOD	tell me a quote
 QOD	tell me a quote please
+QOD	to tell me a quote
+QOD	to tell me a quote please
 
 Author	author
 Author	who was the author
