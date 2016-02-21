@@ -1,13 +1,7 @@
 {
   "intents": [
     {
-     "intent": "WhatDayIsItIntent",
-     "slots":[
-        {
-          "name": "DaysOfWeek",
-          "type": "LIST_OF_DAYS"
-        }
-      ]     
+     "intent": "WhatDayIsItIntent"   
     },
     {
       "intent": "AMAZON.HelpIntent"
