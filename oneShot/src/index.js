@@ -1,16 +1,16 @@
 
 /**
- * dad: an alexa app to tell you the day of the week (in greenwich london)
+ * provides an example of the most simple process
  *
  * main speech threads:
  * what day is it
  *
  * Dialog model:
- *  User: "Alexa, ask ozzi what day is it"
- *  Alexa: "monday"
+ *  User: what day is it
+ *  Alexa: monday
  *  
- * note: the reason we're using GMT is that node servers report the date as GMT, and local
- * timezones/time are not available to external developers
+ * note: the day is based on GMT, as the Date() routine is being run on node.js, which uses GMT. at this
+ * time, amazon does not expose the user's local time or location to the developer.
  */
 
 /**
@@ -36,14 +36,14 @@ patternSkill.prototype.constructor = patternSkill;
 // default intent
  
 patternSkill.prototype.eventHandlers.onLaunch = function (launchRequest, session, response) {
-	handleTellMeADadJokeIntent(session, response);
+	handleWhatDayIsItIntent(response);
 };
 
 // intent handlers
 
 patternSkill.prototype.intentHandlers = {
 	"WhatDayIsItIntent": function (intent, session, response) {
-		handleWhatDayIsItIntent(session, response);
+		handleWhatDayIsItIntent(response);
 	},
 
 	"AMAZON.HelpIntent": function (intent, session, response) {
@@ -73,12 +73,13 @@ patternSkill.prototype.intentHandlers = {
 
 // figure out the day in greenwich, london and output it
 
-function handleWhatDayIsItIntent(session, response) {
+function handleWhatDayIsItIntent(response) {
 	var speechText = "";
-
+	var d = new Date();
+	
 	// get day of week
-	session.attributes.day = DAYS_OF_WEEK[d.getDay()];	
-	speechText = "it is " + session.attributes.day + " in Greenwich London";
+	var day = DAYS_OF_WEEK[d.getDay()];	
+	speechText = "it is " + day + " in Greenwich London";
 
 	var speechOutput = {
 		speech: speechText,

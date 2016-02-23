@@ -1,16 +1,17 @@
 
 /**
- * dad: an alexa app to tell you the day of the week (in greenwich london)
+ * provides an example of how to make a simple rest call
  *
  * main speech threads:
  * what day is it
  *
  * Dialog model:
- *  User: "Alexa, ask ozzi what day is it"
- *  Alexa: "monday"
- *  
- * note: the reason we're using GMT is that node servers report the date as GMT, and local
- * timezones/time are not available to external developers
+ *  User: tell me a quote
+ *  Alexa: roses are red...
+ *  User: author
+ *  Alexa: Gammer Gurton
+ *
+ * REST service: http://quotesondesign.com
  */
 
 /**

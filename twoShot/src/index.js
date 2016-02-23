@@ -1,16 +1,21 @@
 
 /**
- * dad: an alexa app to tell you the day of the week (in greenwich london)
+ * provides an 
  *
  * main speech threads:
  * what day is August 15, 1952?
  * repeat thread after confirming another day is desired
  *
  * Dialog model:
- *  User: "Alexa, ask ozzi what day is August 15, 1952?"
- *  Alexa: "August 15, 1952 was a monday"
+ *  User: what day is August 15, 1952?
+ *  Alexa: August 15, 1952 was a monday
  *  Alexa: "Would you like another day?"
- *   
+ *  User: Yep
+ *  Alexa: What date would you like the day for?
+ *  ...
+ *  User: No
+ *  Alexa: Okey doke. Bye.
+ *
  * note: the reason we're using GMT is that node servers report the date as GMT, and local
  * timezones/time are not available to external developers
  */
