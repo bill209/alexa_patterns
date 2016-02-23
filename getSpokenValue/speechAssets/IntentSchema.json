@@ -1,0 +1,22 @@
+{
+  "intents": [
+    {
+     "intent": "MainIntent",
+     "slots":[
+        {
+          "name": "randomWords",
+          "type": "LIST_OF_WORDS"
+        }
+      ]     
+    },
+    {
+      "intent": "AMAZON.HelpIntent"
+    },
+    {
+      "intent": "AMAZON.StopIntent"
+    },
+    {
+      "intent": "AMAZON.CancelIntent"
+    }
+  ]
+}
