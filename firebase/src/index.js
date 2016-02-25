@@ -17,6 +17,15 @@ var APP_ID = undefined;//replace with 'amzn1.echo-sdk-ams.app.[your-unique-value
 var DAYS_OF_WEEK = [ 'sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday' ];
 var AlexaSkill = require('./AlexaSkill');
 
+
+// setup firebase
+
+var Firebase = require('firebase');
+var fbRef = new Firebase('https://boiling-fire-3340.firebaseio.com/Alexa');
+//fbRef.set("alexa over here");
+var TEST_FB = "";
+
+
 // setup patternSkill
 
 var patternSkill = function () {
@@ -67,18 +76,31 @@ patternSkill.prototype.intentHandlers = {
 // figure out the day in greenwich, london and output it
 
 function handleWhatDayIsItIntent(response) {
+
+// Attach an asynchronous callback to read the data at our posts reference
+fbRef.on("value", function(snapshot) {
+  console.log("value: ",snapshot.val());
 	var speechText = "";
 	var d = new Date();
 	
 	// get day of week
 	var day = DAYS_OF_WEEK[d.getDay()];	
-	speechText = "it is " + day + " in Greenwich London";
+	speechText = "------------------ " + snapshot.val() + " -----------------";
 
 	var speechOutput = {
 		speech: speechText,
 		type: AlexaSkill.speechOutputType.PLAIN_TEXT
 	};
 	response.tellWithCard(speechOutput, "What Day Is It?", speechText);
+
+}, function (errorObject) {
+  console.log("The read failed: " + errorObject.code);
+});
+
+
+
+
+
 }
 
 // Create the handler that responds to the Alexa Request.
