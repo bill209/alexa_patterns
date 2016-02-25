@@ -1,23 +1,16 @@
 
 /**
- * dad: an alexa app to tell you the day of the week (in greenwich london)
- *
- * main speech threads:
- * what day is it
+ * dad: an alexa app to repeat anything the user says (max words > 9)
  *
  * Dialog model:
- *  User: "Alexa, ask ozzi what day is it"
- *  Alexa: "monday"
- *  
- * note: the reason we're using GMT is that node servers report the date as GMT, and local
- * timezones/time are not available to external developers
+ *  User: "Alexa, ask parrot it was the best of times
+ *  Alexa: "it was the best of times"
+ * 
+ * author: bill rowland
+ * git: https://github.com/bill209 
  */
 
-/**
- * App ID for the skill
- */
 var APP_ID = undefined;//replace with 'amzn1.echo-sdk-ams.app.[your-unique-value-here]';
-var DAYS_OF_WEEK = [ 'sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday' ];
 
 // The AlexaSkill prototype and helper functions 
 var AlexaSkill = require('./AlexaSkill');
@@ -64,12 +57,11 @@ patternSkill.prototype.intentHandlers = {
 	}
 };
 
-// figure out the day in greenwich, london and output it
+// just repeat whatever was spoken
 
 function mainIntent(intent, session, response) {
 	var interpretedValue = intent.slots.randomWords.value;
-	console.log('----------------- ', interpretedValue, ' ----------------');
-	var speechText = "i'm all done.";
+	var speechText = interpretedValue;
 
 	var speechOutput = {
 		speech: speechText,
