@@ -1,5 +1,1 @@
-WhatDayIsItIntent what day is it
-WhatDayIsItIntent what is the day
-WhatDayIsItIntent what day
-WhatDayIsItIntent what day it is
-WhatDayIsItIntent what the day is
+GetItem hi {todoList}

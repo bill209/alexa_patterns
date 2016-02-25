@@ -1,7 +1,22 @@
 {
   "intents": [
     {
-     "intent": "WhatDayIsItIntent"   
+      "intent": "ReadList"
+    },
+    {
+     "intent": "AddItem",
+      "slots" : [
+      { 
+        "name" : "todoList",
+        "type" : "LIST_OF_WORDS"
+      }
+     ]
+    },
+    {
+      "intent": "AMAZON.YesIntent"
+    },
+    {
+      "intent": "AMAZON.NoIntent"
     },
     {
       "intent": "AMAZON.HelpIntent"

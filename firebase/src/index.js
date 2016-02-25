@@ -6,25 +6,30 @@
  * what day is it
  *
  * Dialog model:
- *  User: what day is it
- *  Alexa: monday
+ *  Alexa: you have 3 items in your todo list
+ *  Alexa: would you like to add an item
+ *  User: yes
+ *  Alexa: what would you like to add?
+ *  User: wash the dog
+ *	Alexa: wash the dog added to the list
+ *  Alexa: would you like to add anything else?
+ *  User: no
+ *  Alexa: would you like me to read the list to you?
+ *  User: yes
+ *  Alexa: one, bake a pie, two, clean the oven, three, wash the dog
+ *  Alexa: would you like to add another item?
+ *  User: no
+ *  Alexa: okey doke, bye
  *  
- * note: the day is based on GMT, as the Date() routine is being run on node.js, which uses GMT. at this
- * time, amazon does not expose the user's local time or location to the developer.
  */
 
 var APP_ID = undefined;//replace with 'amzn1.echo-sdk-ams.app.[your-unique-value-here]';
-var DAYS_OF_WEEK = [ 'sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday' ];
 var AlexaSkill = require('./AlexaSkill');
-
+var FB_URL = 'https://boiling-fire-3340.firebaseio.com/alexa/'
 
 // setup firebase
 
 var Firebase = require('firebase');
-var fbRef = new Firebase('https://boiling-fire-3340.firebaseio.com/Alexa');
-//fbRef.set("alexa over here");
-var TEST_FB = "";
-
 
 // setup patternSkill
 
@@ -38,19 +43,22 @@ patternSkill.prototype.constructor = patternSkill;
 // default intent
  
 patternSkill.prototype.eventHandlers.onLaunch = function (launchRequest, session, response) {
-	handleWhatDayIsItIntent(response);
+	//
 };
 
 // intent handlers
 
 patternSkill.prototype.intentHandlers = {
-	"WhatDayIsItIntent": function (intent, session, response) {
-		handleWhatDayIsItIntent(response);
+	"ReadList": function (intent, session, response) {
+		readList(intent, session, response);
+	},
+
+	"AddItem": function (intent, session, response) {
+		addItem(intent, session, response);
 	},
 
 	"AMAZON.HelpIntent": function (intent, session, response) {
-		var speechText = "There are simply times when you need to know the day in Greenwich London. " +
-							"You may simply ask, what day is it";
+		var speechText = "Add an item by saying Add";
 		var speechOutput = {
 			speech: speechText,
 			type: AlexaSkill.speechOutputType.PLAIN_TEXT
@@ -73,35 +81,72 @@ patternSkill.prototype.intentHandlers = {
 	}
 };
 
-// figure out the day in greenwich, london and output it
-
-function handleWhatDayIsItIntent(response) {
-
-// Attach an asynchronous callback to read the data at our posts reference
-fbRef.on("value", function(snapshot) {
-  console.log("value: ",snapshot.val());
-	var speechText = "";
-	var d = new Date();
-	
-	// get day of week
-	var day = DAYS_OF_WEEK[d.getDay()];	
-	speechText = "------------------ " + snapshot.val() + " -----------------";
+function readList(intent, session, response){
 
 	var speechOutput = {
-		speech: speechText,
+		speech: "read list",
 		type: AlexaSkill.speechOutputType.PLAIN_TEXT
 	};
-	response.tellWithCard(speechOutput, "What Day Is It?", speechText);
+	response.tell(speechOutput);
 
-}, function (errorObject) {
-  console.log("The read failed: " + errorObject.code);
-});
+	// var items = fbReadList();
 
-
-
-
-
+	// console.log('+++ fbreadlist +++', FB_URL);
+	// var fbRef = new Firebase(FB_URL);
+	// var items = [];
+	// fbRef.once("value", function(snapshot) {
+	// 	snapshot.forEach(function(childSnapshot) {
+	// 		var key = childSnapshot.key();
+	// 		// childData will be the actual contents of the child
+	// 		var childData = childSnapshot.val();
+	// 		items.push(childData.item)
+	// 	});
+	// 	var speechOutput = {
+	// 		speech: items,
+	// 		type: AlexaSkill.speechOutputType.PLAIN_TEXT
+	// 	};
+	// 	response.tell(speechOutput);
+	// });
 }
+
+function addItem(intent, session, response) {
+	var speechOutput = {
+		speech: "add an item",
+		type: AlexaSkill.speechOutputType.PLAIN_TEXT
+	};
+	response.tell(speechOutput);
+}
+
+function getItem(response) {
+
+	// read data at URL location
+	fbRef.on("value", function(snapshot) {
+		var speechText = "";
+		var d = new Date();
+		
+		// get day of week
+		var day = DAYS_OF_WEEK[d.getDay()];	
+		speechText = snapshot.val();
+
+		var speechOutput = {
+			speech: speechText,
+			type: AlexaSkill.speechOutputType.PLAIN_TEXT
+		};
+		response.tellWithCard(speechOutput, "success", speechText);
+
+	}, function (errorObject) {
+		var speechOutput = {
+			speech: errorObject,
+			type: AlexaSkill.speechOutputType.PLAIN_TEXT
+		};
+		response.tellWithCard(speechOutput, "failure", speechText);
+	});
+}
+
+// firebase functions
+
+function fbReadList(){
+}	
 
 // Create the handler that responds to the Alexa Request.
 exports.handler = function (event, context) {

@@ -1,13 +1,13 @@
 {
   "intents": [
     {
-     "intent": "MainIntent",
-     "slots":[
-        {
-          "name": "randomWords",
-          "type": "LIST_OF_WORDS"
-        }
-      ]     
+     "intent": "GetItem", 
+      "slots" : [
+      { 
+        "name" : "todoLIST",
+        "type" : "LIST_OF_WORDS"
+      }
+     ]
     },
     {
       "intent": "AMAZON.HelpIntent"
@@ -20,3 +20,5 @@
     }
   ]
 }
+
+
