@@ -82,31 +82,39 @@ patternSkill.prototype.intentHandlers = {
 };
 
 function readList(intent, session, response){
+	var speechText = "Your list is empty. get busy buster.";
 
-	var speechOutput = {
-		speech: "read list",
-		type: AlexaSkill.speechOutputType.PLAIN_TEXT
-	};
-	response.tell(speechOutput);
+	fbGetList(function(todos){
+		var speechText = "Your list is empty. get busy buster.";
+		if(todos.length > 0){
+			speechText = "Your list consists of the following " + todos.length + " items. ";
+			for(i=0; i<todos.length; i++){
+				speechText += todos[i] + ", ";
+			}
+		}
+		var speechOutput = {
+			speech: speechText,
+			type: AlexaSkill.speechOutputType.PLAIN_TEXT
+		};		
+		response.tellWithCard(speechOutput, "todo list", speechText);
+	})
+}
 
-	// var items = fbReadList();
+function fbGetList(cback){
 
-	// console.log('+++ fbreadlist +++', FB_URL);
-	// var fbRef = new Firebase(FB_URL);
-	// var items = [];
-	// fbRef.once("value", function(snapshot) {
-	// 	snapshot.forEach(function(childSnapshot) {
-	// 		var key = childSnapshot.key();
-	// 		// childData will be the actual contents of the child
-	// 		var childData = childSnapshot.val();
-	// 		items.push(childData.item)
-	// 	});
-	// 	var speechOutput = {
-	// 		speech: items,
-	// 		type: AlexaSkill.speechOutputType.PLAIN_TEXT
-	// 	};
-	// 	response.tell(speechOutput);
-	// });
+	var fbRef = new Firebase(FB_URL);
+	var items = [];
+
+	fbRef.once("value", function(snapshot) {
+		snapshot.forEach(function(childSnapshot) {
+			var key = childSnapshot.key();
+			// childData will be the actual contents of the child
+			var childData = childSnapshot.val();
+			items.push(childData.item)
+		});
+		cback(items)
+	});
+
 }
 
 function addItem(intent, session, response) {
@@ -117,37 +125,7 @@ function addItem(intent, session, response) {
 	response.tell(speechOutput);
 }
 
-function getItem(response) {
-
-	// read data at URL location
-	fbRef.on("value", function(snapshot) {
-		var speechText = "";
-		var d = new Date();
-		
-		// get day of week
-		var day = DAYS_OF_WEEK[d.getDay()];	
-		speechText = snapshot.val();
-
-		var speechOutput = {
-			speech: speechText,
-			type: AlexaSkill.speechOutputType.PLAIN_TEXT
-		};
-		response.tellWithCard(speechOutput, "success", speechText);
-
-	}, function (errorObject) {
-		var speechOutput = {
-			speech: errorObject,
-			type: AlexaSkill.speechOutputType.PLAIN_TEXT
-		};
-		response.tellWithCard(speechOutput, "failure", speechText);
-	});
-}
-
 // firebase functions
-
-function fbReadList(){
-}	
-
 // Create the handler that responds to the Alexa Request.
 exports.handler = function (event, context) {
 	// Create an instance of the  patternSkill.
